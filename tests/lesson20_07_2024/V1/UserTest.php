@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace lesson20_07_2024\V1;
 
-use App\lesson20_07_2024\V1\Role;
-use App\lesson20_07_2024\V1\User;
+use App\lesson_20_07_2024\V1\Role;
+use App\lesson_20_07_2024\V1\User;
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace lesson20_07_2024\V1;
 
-use App\lesson20_07_2024\V1\Category;
+use App\lesson_20_07_2024\V1\Category;
 use PHPUnit\Framework\TestCase;
 
 class CategoryTest extends TestCase

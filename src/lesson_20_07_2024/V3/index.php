@@ -1,74 +1,75 @@
 <?php
 declare(strict_types=1);
 
-use App\lesson20_07_2024\V1\Article;
-use App\lesson20_07_2024\V1\Category;
-use App\lesson20_07_2024\V1\Role;
-use App\lesson20_07_2024\V1\User;
+use App\lesson_20_07_2024\V3\Article;
+use App\lesson_20_07_2024\V3\ArticleDto;
+use App\lesson_20_07_2024\V3\Category;
+use App\lesson_20_07_2024\V3\CategoryDto;
+use App\lesson_20_07_2024\V3\Role;
+use App\lesson_20_07_2024\V3\RoleDto;
+use App\lesson_20_07_2024\V3\User;
+use App\lesson_20_07_2024\V3\UserDto;
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
 $roleAdminId = 1;
 $roleAdminName = Role::ADMIN;
+$roleAdminDto = new RoleDto($roleAdminId, $roleAdminName);
 
-$roleAdmin = new Role(
-    $roleAdminId,
-    $roleAdminName,
-);
+$roleAdmin = Role::create($roleAdminDto);
 
 $roleModeratorId = 2;
 $roleModeratorName = Role::MODERATOR;
+$roleModeratorDto = new RoleDto($roleModeratorId, $roleModeratorName);
 
-$roleModerator = new Role(
-    $roleModeratorId,
-    $roleModeratorName,
-);
+$roleModerator = Role::create($roleModeratorDto);
 
 $roleUserId = 3;
 $roleUserName = Role::USER;
+$roleUserDto = new RoleDto($roleUserId, $roleUserName);
 
-$roleUser = new Role(
-    $roleUserId,
-    $roleUserName,
-);
-
-$categoryId = 1;
-$categoryName = 'category_one';
-
-$category = new Category(
-    $categoryId,
-    $categoryName,
-);
+$roleUser = Role::create($roleUserDto);
 
 $userId = 1;
-$userLogin = 'user';
+$userName = 'user';
 $userPassword = '123456j';
 $userEmail = 'user@gmail.com';
-$userRoles = [
+$roles = [
     $roleAdminId => $roleAdmin,
     $roleModeratorId => $roleModerator,
     $roleUserId => $roleUser,
 ];
-
-$user = new User(
+$userDto = new UserDto(
     $userId,
-    $userLogin,
+    $userName,
     $userPassword,
     $userEmail,
-    $userRoles,
+    $roles,
 );
+
+$user = User::create($userDto);
+
+$categoryId = 1;
+$categoryName = 'category_one';
+$categoryDto = new CategoryDto(
+    $categoryId,
+    $categoryName,
+);
+
+$category = Category::create($categoryDto);
 
 $articleId = 1;
 $articleTitle = 'article_one';
-$articleBody = 'article content';
-
-$article = new Article(
+$articleBody = 'article_content';
+$articleDto = new ArticleDto(
     $articleId,
     $articleTitle,
     $articleBody,
     $category,
     $user,
 );
+
+$article = Article::create($articleDto);
 
 echo $article->getId() . PHP_EOL;
 echo $article->getTitle() . PHP_EOL;

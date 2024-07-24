@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use App\lesson20_07_2024\V2\Article;
-use App\lesson20_07_2024\V2\Category;
-use App\lesson20_07_2024\V2\Role;
-use App\lesson20_07_2024\V2\User;
+use App\lesson_20_07_2024\V2\Article;
+use App\lesson_20_07_2024\V2\Category;
+use App\lesson_20_07_2024\V2\Role;
+use App\lesson_20_07_2024\V2\User;
 
 require __DIR__ . '/../../../vendor/autoload.php';
 

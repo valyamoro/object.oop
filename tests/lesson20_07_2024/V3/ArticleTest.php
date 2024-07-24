@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace lesson20_07_2024\V3;
 
-use App\lesson20_07_2024\V3\Article;
-use App\lesson20_07_2024\V3\ArticleDto;
-use App\lesson20_07_2024\V3\Category;
-use App\lesson20_07_2024\V3\CategoryDto;
-use App\lesson20_07_2024\V3\Role;
-use App\lesson20_07_2024\V3\RoleDto;
-use App\lesson20_07_2024\V3\User;
-use App\lesson20_07_2024\V3\UserDto;
+use App\lesson_20_07_2024\V3\Article;
+use App\lesson_20_07_2024\V3\ArticleDto;
+use App\lesson_20_07_2024\V3\Category;
+use App\lesson_20_07_2024\V3\CategoryDto;
+use App\lesson_20_07_2024\V3\Role;
+use App\lesson_20_07_2024\V3\RoleDto;
+use App\lesson_20_07_2024\V3\User;
+use App\lesson_20_07_2024\V3\UserDto;
 use PHPUnit\Framework\TestCase;
 
 class ArticleTest extends TestCase

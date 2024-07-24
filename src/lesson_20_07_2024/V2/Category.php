@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\lesson20_07_2024\V2;
+namespace App\lesson_20_07_2024\V2;
 
 class Category
 {
