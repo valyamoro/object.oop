@@ -21,6 +21,7 @@ class UserRepository extends BaseRepository
     public function getOne(int $id): array
     {
         $query = 'SELECT * FROM users where id=? limit 1';
+
         $sth = $this->dbh->prepare($query);
         $sth->execute([$id]);
 

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\lesson_23_07_2024\V1\Services;
 
-use App\lesson_23_07_2024\V1\Collections\RoleCollection;
 use App\lesson_23_07_2024\V1\Collections\UserCollection;
 use App\lesson_23_07_2024\V1\Dto\UserDto;
 use App\lesson_23_07_2024\V1\Models\User;
@@ -16,7 +15,6 @@ final class UserService
         private readonly UserRolesService $userRolesService,
         private readonly RoleService $roleService,
         private readonly UserCollection $userCollection,
-        private readonly RoleCollection $roleCollection,
     ) {}
 
     public function getAll(): UserCollection
@@ -34,15 +32,10 @@ final class UserService
             return null;
         }
 
-
         $userRoles = $this->userRolesService->getAllByUserId($data['id']);
 
-        $rolesData = [];
-        foreach ($userRoles as $item) {
-            $rolesData[] = $this->roleService->getOne($item->getId());
-        }
+        $roles = $this->roleService->convertUserRolesInRoles($userRoles);
 
-        $roles = $this->roleCollection->make($rolesData);
         $userDto = new UserDto(
             $data['id'],
             $data['login'],
@@ -69,7 +62,6 @@ final class UserService
 
         $result = $this->userRepository->update($id, $user);
 
-        // Что возвращает update, надо проверить если например передается несуществующий айди.
         return $result === [] ? null : $user;
     }
 

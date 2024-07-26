@@ -18,12 +18,12 @@ class UserRolesRepository extends BaseRepository
         return $result ? $result : [];
     }
 
-    public function getAllByUserId(int $id): array
+    public function getAllByUserId(int $userId): array
     {
         $query = 'SELECT * FROM user_roles WHERE user_id=?';
 
         $sth = $this->dbh->prepare($query);
-        $sth->execute([$id]);
+        $sth->execute([$userId]);
         $result = $sth->fetchAll();
 
         return $result ? $result : [];

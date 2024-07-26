@@ -45,7 +45,6 @@ class UserServiceTest extends TestCase
             $userRolesService,
             $roleService,
             $this->createMock(UserCollection::class),
-            $this->createMock(RoleCollection::class),
         );
 
         $roles = $this->roleCollection->make([['id' => 1, 'name' => 'user'], ['id' => 2, 'name' => 'moderator']]);

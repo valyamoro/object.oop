@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\lesson_23_07_2024\V1\Services;
 
 use App\lesson_23_07_2024\V1\Collections\RoleCollection;
+use App\lesson_23_07_2024\V1\Collections\UserRolesCollection;
 use App\lesson_23_07_2024\V1\Dto\RoleDto;
 use App\lesson_23_07_2024\V1\Models\Role;
 use App\lesson_23_07_2024\V1\Repositories\RoleRepository;
@@ -63,6 +64,18 @@ final class RoleService
         $result = $this->roleRepository->delete($role);
 
         return $result === false ? null : $role;
+    }
+
+
+    public function convertUserRolesInRoles(UserRolesCollection $userRolesCollection): RoleCollection
+    {
+        $rolesData = [];
+
+        foreach ($userRolesCollection as $item) {
+            $rolesData[] = $this->getOne($item->getId());
+        }
+
+        return $this->roleCollection->make($rolesData);
     }
 
 }

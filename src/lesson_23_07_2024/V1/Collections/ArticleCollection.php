@@ -12,7 +12,7 @@ class ArticleCollection extends Collection
 {
     public function __construct(
         private readonly CategoryService $categoryService,
-        private readonly UserService     $userService,
+        private readonly UserService $userService,
     ) {}
 
     public function make(array $data): ArticleCollection

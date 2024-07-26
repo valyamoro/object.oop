@@ -53,7 +53,6 @@ class ArticleTest extends TestCase
             $userRolesService,
             $roleService,
             $this->createMock(UserCollection::class),
-            $this->createMock(RoleCollection::class),
         );
         $categoryService = new CategoryService(
             $this->createMock(CategoryRepository::class),

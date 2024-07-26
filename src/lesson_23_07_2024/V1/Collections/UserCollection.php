@@ -7,16 +7,15 @@ use App\lesson_23_07_2024\V1\Dto\UserDto;
 use App\lesson_23_07_2024\V1\Models\User;
 use App\lesson_23_07_2024\V1\Services\RoleService;
 use App\lesson_23_07_2024\V1\Services\UserRolesService;
+use App\lesson_23_07_2024\V1\Services\UserService;
 
 class UserCollection extends Collection
 {
     public function __construct(
         private readonly UserRolesService $userRolesService,
         private readonly RoleService $roleService,
-        private readonly RoleCollection   $roleCollection,
-    )
-    {
-    }
+        private readonly RoleCollection $roleCollection,
+    ) {}
 
     public function make(array $data): UserCollection
     {
@@ -28,15 +27,8 @@ class UserCollection extends Collection
             $password = $item['password'];
             $email = $item['email'];
             $userRoles = $this->userRolesService->getAllByUserId($id);
-            $rolesData = [];
 
-            foreach ($userRoles->items as $userRole) {
-                if (!empty($userRole->items)) {
-                    $rolesData[] = $this->roleService->getOne($userRole->getRoleId());
-                }
-            }
-
-            $roles = $this->roleCollection->make($rolesData);
+            $roles = $this->roleService->convertUserRolesInRoles($userRoles);
 
             $userDto = new UserDto(
                 $id,

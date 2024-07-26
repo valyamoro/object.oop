@@ -25,10 +25,22 @@ use App\lesson_23_07_2024\V1\Services\UserService;
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
-$pdo = new \PDO('mysql:host=MySQL-8.2;dbname=lesson_23_07_2024;charset=utf8', 'root', '', [
-    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-]);
+$config = require __DIR__ . '/config/database.php';
+
+$database = $config['database'];
+$host = $config['host'];
+$databaseName = $config['database_name'];
+$charset = $config['charset'];
+$username = $config['username'];
+$password = $config['password'];
+$options = $config['options'];
+
+$pdo = new \PDO(
+    $database . ':host=' . $host . ';dbname=' . $databaseName . ';charset=' . $charset,
+    $username,
+    $password,
+    $options,
+);
 
 $userRolesRepository = new UserRolesRepository($pdo);
 $userRolesCollection = new UserRolesCollection();
@@ -47,7 +59,7 @@ for ($i = 1; $i <= 5; $i++) {
     );
 
     if ($userRolesService->getOne($userRolesDto->id) === null) {
-        $createdUserRoles = $userRolesService->create($userRolesDto);
+        $userRolesService->create($userRolesDto);
     }
 }
 
@@ -201,7 +213,7 @@ echo PHP_EOL;
 
 $userRepository = new UserRepository($pdo);
 $userCollection = new UserCollection($userRolesService, $roleService, $roleCollection);
-$userService = new UserService($userRepository, $userRolesService, $roleService, $userCollection, $roleCollection);
+$userService = new UserService($userRepository, $userRolesService, $roleService, $userCollection);
 
 $rolesData = [
     [
