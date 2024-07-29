@@ -23,7 +23,7 @@ class CategoryCollection extends Collection
 
         $this->set($result);
 
-        return $result ? $this : null;
+        return $this;
     }
 
     public function set(array $items): CategoryCollection

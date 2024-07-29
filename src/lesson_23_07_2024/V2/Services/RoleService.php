@@ -52,7 +52,7 @@ class RoleService
     {
         $result = $this->roleRepository->update($roleDto);
 
-        if ($result === null) {
+        if ($result === []) {
             return null;
         }
 

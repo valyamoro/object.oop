@@ -23,8 +23,8 @@ class User extends Model
         return new User(
             $userDto->id,
             $userDto->login,
-            $userDto->email,
             $userDto->password,
+            $userDto->email,
             $userDto->roles,
         );
     }
