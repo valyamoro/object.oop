@@ -18,14 +18,14 @@ $dependenciesConfig = require __DIR__ . '/config/dependencies.php';
 $router = new Router($dependenciesConfig, $pdoDriver);
 
 $data = [
-    'id' => '4',
-    'title' => 'new article',
-    'body' => 'article_content',
-    'category_id' => '13',
-    'user_id' => '10',
+    'id' => '5',
+    'title' => 'article 2',
+    'body' => 'wdqdwdqw',
+    'category_id' => '17',
+    'user_id' => '18',
 ];
 
-$result = $router->dispatch('Article', 'show', $data);
+$result = $router->dispatch('Article', 'delete', $data);
 
 if ($result === null) {
     echo 'Произошла ошибка!';
