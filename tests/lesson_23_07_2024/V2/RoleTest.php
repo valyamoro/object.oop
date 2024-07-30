@@ -20,8 +20,6 @@ class RoleTest extends TestCase
 
     public function setUp(): void
     {
-        parent::setUp();
-
         $databaseConfig = require __DIR__ . '/../../../src/lesson_23_07_2024/V2/config/test_database.php';
 
         $databaseConfiguration = new DatabaseConfiguration(...$databaseConfig);
@@ -56,23 +54,23 @@ class RoleTest extends TestCase
     public function testCanUpdate(): void
     {
         $role = $this->roleController->store([
-            'name' => 'role 1',
+            'name' => 'role_name',
         ]);
-        $updatedData = [
+        $data = [
             'id' => $role->getId(),
-            'name' => 'updated role 1',
+            'name' => 'updated role_name',
         ];
 
-        $result = $this->roleController->update($updatedData);
+        $result = $this->roleController->update($data);
 
         $this->assertInstanceOf(Role::class, $result);
-        $this->assertSame('updated role 1', $result->getName());
+        $this->assertSame('updated role_name', $result->getName());
     }
 
     public function testCanGetOne(): void
     {
         $role = $this->roleController->store([
-            'name' => 'role 1',
+            'name' => 'role_name',
         ]);
         $data = [
             'id' => $role->getId(),
@@ -81,13 +79,13 @@ class RoleTest extends TestCase
         $result = $this->roleController->show($data);
 
         $this->assertInstanceOf(Role::class, $result);
-        $this->assertSame('role 1', $result->getName());
+        $this->assertSame('role_name', $result->getName());
     }
 
     public function testCanDelete(): void
     {
         $role = $this->roleController->store([
-            'name' => 'role 1',
+            'name' => 'role_name',
         ]);
         $data = [
             'id' => $role->getId(),
@@ -100,8 +98,6 @@ class RoleTest extends TestCase
 
     public function tearDown(): void
     {
-        parent::tearDown();
-
         $query = 'DELETE FROM roles';
 
         $sth = $this->PDODriver->prepare($query);

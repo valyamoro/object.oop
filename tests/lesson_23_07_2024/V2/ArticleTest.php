@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace lesson_23_07_2024\V2;
 
+use App\lesson_23_07_2024\V2\Controllers\RoleController;
 use App\lesson_23_07_2024\V2\Models\Article;
 use App\lesson_23_07_2024\V2\Models\Category;
 use App\lesson_23_07_2024\V2\Collections\ArticleCollection;
@@ -34,6 +35,7 @@ class ArticleTest extends TestCase
     private readonly ArticleController $articleController;
     private readonly CategoryController $categoryController;
     private readonly UserController $userController;
+    private readonly RoleController $roleController;
     private readonly PDODriver $PDODriver;
 
     public function setUp(): void
@@ -60,6 +62,7 @@ class ArticleTest extends TestCase
             $roleRepository,
             $roleCollection,
         );
+        $this->roleController = new RoleController($roleService);
 
         $userCollection = new UserCollection(
             $userRolesService,
@@ -109,6 +112,9 @@ class ArticleTest extends TestCase
 
     public function testCanCreate(): void
     {
+        $role = $this->roleController->store([
+            'name' => 'role_name',
+        ]);
         $category = $this->categoryController->store([
             'name' => 'category',
         ]);
@@ -117,9 +123,7 @@ class ArticleTest extends TestCase
             'password' => '123456j',
             'email' => 'user@gmail.com',
             'roles' => [
-                '1',
-                '2',
-                '3',
+                $role->getId(),
             ],
         ]);
         $data = [
@@ -140,10 +144,15 @@ class ArticleTest extends TestCase
         $this->assertSame('user 1', $result->getUser()->getLogin());
         $this->assertSame('123456j', $result->getUser()->getPassword());
         $this->assertSame('user@gmail.com', $result->getUser()->getEmail());
+        $this->assertInstanceOf(RoleCollection::class, $result->getUser()->getRoles());
+        $this->assertSame('role_name', $result->getUser()->getRoles()->get()[0]->getName());
     }
 
     public function testCanUpdate(): void
     {
+        $role = $this->roleController->store([
+            'name' => 'role_name',
+        ]);
         $category = $this->categoryController->store([
             'name' => 'category',
         ]);
@@ -152,9 +161,7 @@ class ArticleTest extends TestCase
             'password' => '123456j',
             'email' => 'user@gmail.com',
             'roles' => [
-                '1',
-                '2',
-                '3',
+                $role->getId(),
             ],
         ]);
         $data = [
@@ -183,10 +190,15 @@ class ArticleTest extends TestCase
         $this->assertSame('user 1', $result->getUser()->getLogin());
         $this->assertSame('123456j', $result->getUser()->getPassword());
         $this->assertSame('user@gmail.com', $result->getUser()->getEmail());
+        $this->assertInstanceOf(RoleCollection::class, $result->getUser()->getRoles());
+        $this->assertSame('role_name', $result->getUser()->getRoles()->get()[0]->getName());
     }
 
     public function testCanGetOne(): void
     {
+        $role = $this->roleController->store([
+            'name' => 'role_name',
+        ]);
         $category = $this->categoryController->store([
             'name' => 'category',
         ]);
@@ -195,9 +207,7 @@ class ArticleTest extends TestCase
             'password' => '123456j',
             'email' => 'user@gmail.com',
             'roles' => [
-                '1',
-                '2',
-                '3',
+                $role->getId(),
             ],
         ]);
         $article = $this->articleController->store([
@@ -221,10 +231,15 @@ class ArticleTest extends TestCase
         $this->assertSame('user 1', $result->getUser()->getLogin());
         $this->assertSame('123456j', $result->getUser()->getPassword());
         $this->assertSame('user@gmail.com', $result->getUser()->getEmail());
+        $this->assertInstanceOf(RoleCollection::class, $result->getUser()->getRoles());
+        $this->assertSame('role_name', $result->getUser()->getRoles()->get()[0]->getName());
     }
 
     public function testCanDelete(): void
     {
+        $role = $this->roleController->store([
+            'name' => 'role_name',
+        ]);
         $category = $this->categoryController->store([
             'name' => 'category',
         ]);
@@ -233,9 +248,7 @@ class ArticleTest extends TestCase
             'password' => '123456j',
             'email' => 'user@gmail.com',
             'roles' => [
-                '1',
-                '2',
-                '3',
+                $role->getId(),
             ],
         ]);
         $article = $this->articleController->store([
@@ -255,9 +268,17 @@ class ArticleTest extends TestCase
 
     public function tearDown(): void
     {
-        parent::tearDown();
-
         $query = 'DELETE FROM articles';
+
+        $sth = $this->PDODriver->prepare($query);
+        $sth->execute();
+
+        $query = 'DELETE FROM users';
+
+        $sth = $this->PDODriver->prepare($query);
+        $sth->execute();
+
+        $query = 'DELETE FROM user_roles';
 
         $sth = $this->PDODriver->prepare($query);
         $sth->execute();

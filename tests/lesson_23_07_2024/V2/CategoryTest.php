@@ -20,8 +20,6 @@ class CategoryTest extends TestCase
 
     public function setUp(): void
     {
-        parent::setUp();
-
         $databaseConfig = require __DIR__ . '/../../../src/lesson_23_07_2024/V2/config/test_database.php';
 
         $databaseConfiguration = new DatabaseConfiguration(...$databaseConfig);
@@ -56,23 +54,23 @@ class CategoryTest extends TestCase
     public function testCanUpdate(): void
     {
         $role = $this->categoryController->store([
-            'name' => 'category 1',
+            'name' => 'category_name',
         ]);
         $updatedData = [
             'id' => $role->getId(),
-            'name' => 'updated category 1',
+            'name' => 'updated category_name',
         ];
 
         $result = $this->categoryController->update($updatedData);
 
         $this->assertInstanceOf(Category::class, $result);
-        $this->assertSame('updated category 1', $result->getName());
+        $this->assertSame('updated category_name', $result->getName());
     }
 
     public function testCanGetOne(): void
     {
         $category = $this->categoryController->store([
-            'name' => 'category 1',
+            'name' => 'category_name',
         ]);
         $data = [
             'id' => $category->getId(),
@@ -81,13 +79,13 @@ class CategoryTest extends TestCase
         $result = $this->categoryController->show($data);
 
         $this->assertInstanceOf(Category::class, $result);
-        $this->assertSame('category 1', $result->getName());
+        $this->assertSame('category_name', $result->getName());
     }
 
     public function testCanDelete(): void
     {
         $category = $this->categoryController->store([
-            'name' => 'category 1',
+            'name' => 'category_name',
         ]);
         $data = [
             'id' => $category->getId(),
@@ -100,8 +98,6 @@ class CategoryTest extends TestCase
 
     public function tearDown(): void
     {
-        parent::tearDown();
-
         $query = 'DELETE FROM categories';
 
         $sth = $this->PDODriver->prepare($query);

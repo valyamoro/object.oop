@@ -23,8 +23,9 @@ class UserCollection extends Collection
 
     public function make(array $items): UserCollection
     {
-        $result = array_map(function(array $item) {
+        $result = array_map(function (array $item) {
             $userRoles = $this->userRolesService->getAllByUserId($item['id']);
+
             $roles = $this->convertUserRolesToRoles($userRoles);
 
             $userDto = UserService::createUserDto($item, $roles);

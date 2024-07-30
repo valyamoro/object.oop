@@ -40,11 +40,11 @@ class RoleCollection extends Collection
         }
 
         if ($isCorrectCollection) {
-            $result = null;
-        } else {
             $this->items = $items;
 
             $result = $this;
+        } else {
+            $result = null;
         }
 
         return $result;
