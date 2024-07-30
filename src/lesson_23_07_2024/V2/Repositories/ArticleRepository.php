@@ -41,7 +41,9 @@ class ArticleRepository extends BaseRepository
             $articleDto->user->getId(),
         ]);
 
-        return $this->getOne($this->dbh->lastInsertId());
+        $result = $this->getOne($this->dbh->lastInsertId());
+
+        return $result;
     }
 
     public function update(ArticleDto $articleDto): array
@@ -57,7 +59,9 @@ class ArticleRepository extends BaseRepository
             $articleDto->id,
         ]);
 
-        return $this->getOne($articleDto->id);
+        $result = $this->getOne($articleDto->id);
+
+        return $result;
     }
 
     public function delete(int $id): bool
@@ -67,7 +71,9 @@ class ArticleRepository extends BaseRepository
         $sth = $this->dbh->prepare($query);
         $sth->execute([$id]);
 
-        return (bool)$sth->rowCount();
+        $result = $sth->rowCount();
+
+        return (bool)$result;
     }
 
 }

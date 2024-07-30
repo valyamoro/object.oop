@@ -1,7 +1,20 @@
 <?php
 
 return [
-    App\lesson_23_07_2024\V2\Database\PDODriver::class => [],
+    App\lesson_23_07_2024\V2\Database\DatabaseConfiguration::class => [
+        'dependencies' => [],
+        'parameters' => [...require __DIR__ . '/database.php'],
+    ],
+    App\lesson_23_07_2024\V2\Database\DatabasePDOConnection::class => [
+        'dependencies' => [
+            App\lesson_23_07_2024\V2\Database\DatabaseConfiguration::class,
+        ],
+    ],
+    App\lesson_23_07_2024\V2\Database\PDODriver::class => [
+        'dependencies' => [
+            App\lesson_23_07_2024\V2\Database\DatabasePDOConnection::class,
+        ],
+    ],
 
     App\lesson_23_07_2024\V2\Collections\CategoryCollection::class => [
         'dependencies' => [],

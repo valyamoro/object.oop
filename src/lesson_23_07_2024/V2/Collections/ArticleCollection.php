@@ -20,7 +20,7 @@ class ArticleCollection extends Collection
         return $this->items;
     }
 
-    public function make(array $items): ?ArticleCollection
+    public function make(array $items): ArticleCollection
     {
         $result = array_map(function(array $item) {
             $category = $this->categoryService->getOne($item['category_id']);
@@ -28,17 +28,12 @@ class ArticleCollection extends Collection
 
             $articleDto = ArticleService::createArticleDto($item, $category, $user);
 
-            return Article::writeNewFrom($articleDto);
+            $result = Article::writeNewFrom($articleDto);
+
+            return $result;
         }, $items);
 
-        $this->set($result);
-
-        return $this;
-    }
-
-    public function set(array $items): ArticleCollection
-    {
-        $this->items = $items;
+        $this->items = $result;
 
         return $this;
     }

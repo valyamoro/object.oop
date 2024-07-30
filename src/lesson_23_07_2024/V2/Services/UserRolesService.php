@@ -17,56 +17,53 @@ class UserRolesService
 
     public function getAll(): UserRolesCollection
     {
-        $result = $this->userRolesRepository->getAll();
+        $data = $this->userRolesRepository->getAll();
 
-        return $this->userRolesCollection->make($result);
+        $result = $this->userRolesCollection->make($data);
+
+        return $result;
     }
 
     public function getAllByUserId(int $userId): UserRolesCollection
     {
-        $result = $this->userRolesRepository->getAllByUserId($userId);
+        $data = $this->userRolesRepository->getAllByUserId($userId);
 
-        return $this->userRolesCollection->make($result);
+        $result = $this->userRolesCollection->make($data);
+
+        return $result;
     }
 
     public function create(UserRolesDto $userRolesDto): ?UserRoles
     {
-        $result = $this->userRolesRepository->create($userRolesDto);
+        $data = $this->userRolesRepository->create($userRolesDto);
 
-        if ($result === []) {
+        if ($data === []) {
             return null;
         }
 
-        $userRolesDto = $this->createUserRolesDto($result);
+        $userRolesDto = $this->createUserRolesDto($data);
 
-        return UserRoles::writeNewFrom($userRolesDto);
-    }
+        $result = UserRoles::writeNewFrom($userRolesDto);
 
-    public function update(UserRolesDto $userRolesDto): ?UserRoles
-    {
-        $result = $this->userRolesRepository->update($userRolesDto);
-
-        if ($result === null) {
-            return null;
-        }
-
-        $userRolesDto = $this->createUserRolesDto($result);
-
-        return UserRoles::writeNewFrom($userRolesDto);
+        return $result;
     }
 
     public function delete(UserRolesDto $userRolesDto): bool
     {
-        return $this->userRolesRepository->delete($userRolesDto);
+        $result = $this->userRolesRepository->delete($userRolesDto);
+
+        return $result;
     }
 
     public static function createUserRolesDto(array $data): UserRolesDto
     {
-        return new UserRolesDto(
+        $result = new UserRolesDto(
             (int)$data['id'],
             (int)$data['user_id'],
             (int)$data['role_id'],
         );
+
+        return $result;
     }
 
 }

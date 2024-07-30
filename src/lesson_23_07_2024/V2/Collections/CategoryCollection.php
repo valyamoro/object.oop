@@ -13,22 +13,17 @@ class CategoryCollection extends Collection
         return $this->items;
     }
 
-    public function make(array $items): ?CategoryCollection
+    public function make(array $items): CategoryCollection
     {
         $result = array_map(function(array $item) {
             $categoryDto = CategoryService::createCategoryDto($item);
 
-            return Category::writeNewFrom($categoryDto);
+            $result = Category::writeNewFrom($categoryDto);
+
+            return $result;
         }, $items);
 
-        $this->set($result);
-
-        return $this;
-    }
-
-    public function set(array $items): CategoryCollection
-    {
-        $this->items = $items;
+        $this->items = $result;
 
         return $this;
     }

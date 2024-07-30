@@ -5,7 +5,6 @@ namespace App\lesson_23_07_2024\V2\Repositories;
 
 
 use App\lesson_23_07_2024\V2\Dto\RoleDto;
-use App\lesson_23_07_2024\V2\Models\Role;
 
 class RoleRepository extends BaseRepository
 {
@@ -41,7 +40,9 @@ class RoleRepository extends BaseRepository
             $roleDto->name,
         ]);
 
-        return $this->getOne($this->dbh->lastInsertId());
+        $result = $this->getOne($this->dbh->lastInsertId());
+
+        return $result;
     }
 
     public function update(RoleDto $roleDto): array
@@ -54,7 +55,9 @@ class RoleRepository extends BaseRepository
             $roleDto->id,
         ]);
 
-        return $this->getOne($roleDto->id);
+        $result = $this->getOne($roleDto->id);
+
+        return $result;
     }
 
     public function delete(int $id): bool
@@ -64,7 +67,9 @@ class RoleRepository extends BaseRepository
         $sth = $this->dbh->prepare($query);
         $sth->execute([$id]);
 
-        return (bool)$sth->rowCount();
+        $result = $sth->rowCount();
+
+        return (bool)$result;
     }
 
 }

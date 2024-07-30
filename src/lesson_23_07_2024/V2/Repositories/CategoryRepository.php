@@ -26,7 +26,9 @@ class CategoryRepository extends BaseRepository
 
         $result = $sth->fetch();
 
-        return $result ? $result : [];
+        $result = $result ? $result : [];
+
+        return $result;
     }
 
     public function create(CategoryDto $categoryDto): array
@@ -38,7 +40,9 @@ class CategoryRepository extends BaseRepository
             $categoryDto->name,
         ]);
 
-        return $this->getOne($this->dbh->lastInsertId());
+        $result = $this->getOne($this->dbh->lastInsertId());
+
+        return $result;
     }
 
     public function update(CategoryDto $categoryDto): array
@@ -51,7 +55,9 @@ class CategoryRepository extends BaseRepository
             $categoryDto->id,
         ]);
 
-        return $this->getOne($categoryDto->id);
+        $result = $this->getOne($categoryDto->id);
+
+        return $result;
     }
 
     public function delete(int $id): bool
@@ -61,6 +67,9 @@ class CategoryRepository extends BaseRepository
         $sth = $this->dbh->prepare($query);
         $sth->execute([$id]);
 
-        return (bool)$sth->rowCount();
+        $result = $sth->rowCount();
+
+        return (bool)$result;
     }
+
 }

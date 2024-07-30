@@ -8,7 +8,6 @@ abstract class Collection
     protected array $items;
 
     abstract public function get(): array;
-    abstract public function make(array $items): ?Collection;
-    abstract public function set(array $items): Collection;
+    abstract public function make(array $items): Collection;
 
 }

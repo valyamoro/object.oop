@@ -17,61 +17,73 @@ class RoleService
 
     public function getAll(): RoleCollection
     {
-        $result = $this->roleRepository->getAll();
+        $data = $this->roleRepository->getAll();
 
-        return $this->roleCollection->make($result);
+        $result = $this->roleCollection->make($data);
+
+        return $result;
     }
 
     public function getOne(int $id): ?Role
     {
-        $result = $this->roleRepository->getOne($id);
+        $data = $this->roleRepository->getOne($id);
 
-        if ($result === []) {
+        if ($data === []) {
             return null;
         }
 
-        $roleDto = $this->createRoleDto($result);
+        $roleDto = $this->createRoleDto($data);
 
-        return Role::writeNewFrom($roleDto);
+        $result = Role::writeNewFrom($roleDto);
+
+        return $result;
     }
 
     public function create(RoleDto $roleDto): ?Role
     {
-        $result = $this->roleRepository->create($roleDto);
+        $data = $this->roleRepository->create($roleDto);
 
-        if ($result === []) {
+        if ($data === []) {
             return null;
         }
 
-        $roleDto = $this->createRoleDto($result);
+        $roleDto = $this->createRoleDto($data);
 
-        return Role::writeNewFrom($roleDto);
+        $result = Role::writeNewFrom($roleDto);
+
+        return $result;
     }
 
     public function update(RoleDto $roleDto): ?Role
     {
-        $result = $this->roleRepository->update($roleDto);
+        $data = $this->roleRepository->update($roleDto);
 
-        if ($result === []) {
+        if ($data === []) {
             return null;
         }
 
-        $roleDto = $this->createRoleDto($result);
+        $roleDto = $this->createRoleDto($data);
 
-        return Role::writeNewFrom($roleDto);
+        $result = Role::writeNewFrom($roleDto);
+
+        return $result;
     }
 
     public function delete(int $id): bool
     {
-        return $this->roleRepository->delete($id);
+        $result = $this->roleRepository->delete($id);
+
+        return $result;
     }
 
     public static function createRoleDto(array $data): RoleDto
     {
-        return new RoleDto(
+        $result = new RoleDto(
             (int)$data['id'],
             $data['name'],
         );
+
+        return $result;
     }
 
 }

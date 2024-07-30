@@ -22,18 +22,18 @@ class UserService
 
     public function getAll(): ?UserCollection
     {
-        $result = $this->userRepository->getAll();
+        $data = $this->userRepository->getAll();
 
-        $this->userCollection->make($result);
+        $result = $this->userCollection->make($data);
 
-        return $this->userCollection;
+        return $result;
     }
 
     public function getOne(int $id): ?User
     {
-        $userData = $this->userRepository->getOne($id);
+        $data = $this->userRepository->getOne($id);
 
-        if ($userData === []) {
+        if ($data === []) {
             return null;
         }
 
@@ -41,72 +41,82 @@ class UserService
 
         $roles = $this->userCollection->convertUserRolesToRoles($userRoles);
 
-        $userDto = $this->createUserDto($userData, $roles);
+        $userDto = $this->createUserDto($data, $roles);
 
-        return User::writeNewFrom($userDto);
+        $result = User::writeNewFrom($userDto);
+
+        return $result;
     }
 
     public function create(UserDto $userDto): ?User
     {
-        $userData = $this->userRepository->create($userDto);
+        $data = $this->userRepository->create($userDto);
 
-        if ($userData === []) {
+        if ($data === []) {
             return null;
         }
 
-        $userId = $userData['id'];
-        $userRoles = $this->addUserRoles($userDto->roles, $userId);
+        $userId = $data['id'];
+        $userRoles = $this->addUserRoles(
+            $userDto->roles,
+            $userId,
+        );
         $roleCollection = $this->userCollection->convertUserRolesToRoles($userRoles);
 
-        $userDto = $this->updateUserDto(
-            $userDto,
-            $userData,
+        $userDto = static::createUserDto(
+            $data,
             $roleCollection,
         );
 
-        return User::writeNewFrom($userDto);
+        $result = User::writeNewFrom($userDto);
+
+        return $result;
     }
 
     public function update(UserDto $userDto): ?User
     {
         $userRoles = $this->userRolesService->getAllByUserId($userDto->id);
 
-        $result = $this->deleteUserRoles($userRoles);
-
-        $userRoles = $result ? $this->addUserRoles(
-            $userDto->roles,
-            $userDto->id,
-        ) : null;
-
-        $roleCollection = $this->userCollection->convertUserRolesToRoles($userRoles);
-
-        $userData = $this->userRepository->update($userDto);
-
-        if ($userData === []) {
+        if ($this->deleteUserRoles($userRoles) === null) {
             return null;
         }
 
-        $userDto = $this->updateUserDto(
-            $userDto,
-            $userData,
+        $userRoles = $this->addUserRoles(
+            $userDto->roles,
+            $userDto->id,
+        );
+        $roleCollection = $this->userCollection->convertUserRolesToRoles($userRoles);
+
+        $data = $this->userRepository->update($userDto);
+
+        if ($data === []) {
+            return null;
+        }
+
+        $userDto = static::createUserDto(
+            $data,
             $roleCollection,
         );
 
-        return User::writeNewFrom($userDto);
+        $result = User::writeNewFrom($userDto);
+
+        return $result;
     }
 
     public function delete(int $id): bool
     {
         $userRoles = $this->userRolesService->getAllByUserId($id);
 
-        $result = $this->deleteUserRoles($userRoles);
+        if ($this->deleteUserRoles($userRoles) === null) {
+            return false;
+        }
 
-        $result = $result === null ? false : $this->userRepository->delete($id);
+        $result = $this->userRepository->delete($id);
 
         return $result;
     }
 
-    public function updateUserDto(
+    private function updateUserDto(
         UserDto $userDto,
         array $data,
         RoleCollection $roleCollection,

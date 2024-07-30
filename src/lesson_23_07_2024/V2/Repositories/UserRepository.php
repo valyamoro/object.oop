@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\lesson_23_07_2024\V2\Repositories;
 
 use App\lesson_23_07_2024\V2\Dto\UserDto;
-use App\lesson_23_07_2024\V2\Models\User;
 
 class UserRepository extends BaseRepository
 {
@@ -42,7 +41,9 @@ class UserRepository extends BaseRepository
             $userDto->email,
         ]);
 
-        return $this->getOne($this->dbh->lastInsertId());
+        $result = $this->getOne($this->dbh->lastInsertId());
+
+        return $result;
     }
 
     public function update(UserDto $userDto): array
@@ -57,7 +58,9 @@ class UserRepository extends BaseRepository
             $userDto->id,
         ]);
 
-        return $this->getOne($userDto->id);
+        $result = $this->getOne($userDto->id);
+
+        return $result;
     }
 
     public function delete(int $id): bool
@@ -67,7 +70,9 @@ class UserRepository extends BaseRepository
         $sth = $this->dbh->prepare($query);
         $sth->execute([$id]);
 
-        return (bool)$sth->rowCount();
+        $result = $sth->rowCount();
+
+        return (bool)$result;
     }
 
 }

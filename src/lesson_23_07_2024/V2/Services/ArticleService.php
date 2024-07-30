@@ -21,9 +21,11 @@ class ArticleService
 
     public function getAll(): ArticleCollection
     {
-        $result = $this->articleRepository->getAll();
+        $data = $this->articleRepository->getAll();
 
-        return $this->articleCollection->make($result);
+        $result = $this->articleCollection->make($data);
+
+        return $result;
     }
 
     public function getOne(int $id): ?Article
@@ -35,9 +37,9 @@ class ArticleService
         }
 
         $categoryId = (int)$articleData['category_id'];
-        $category = $this->categoryService->getOne($categoryId);
-
         $userId = (int)$articleData['user_id'];
+
+        $category = $this->categoryService->getOne($categoryId);
         $user = $this->userService->getOne($userId);
 
         $articleDto = static::createArticleDto(
@@ -46,7 +48,9 @@ class ArticleService
             $user,
         );
 
-        return Article::writeNewFrom($articleDto);
+        $result = Article::writeNewFrom($articleDto);
+
+        return $result;
     }
 
     public function store(ArticleDto $articleDto): ?Article
@@ -63,7 +67,9 @@ class ArticleService
             $articleDto->user,
         );
 
-        return Article::writeNewFrom($articleDto);
+        $result = Article::writeNewFrom($articleDto);
+
+        return $result;
     }
 
     public function update(ArticleDto $articleDto): ?Article
@@ -80,12 +86,16 @@ class ArticleService
             $articleDto->user,
         );
 
-        return Article::writeNewFrom($articleDto);
+        $result = Article::writeNewFrom($articleDto);
+
+        return $result;
     }
 
     public function delete(int $id): bool
     {
-        return $this->articleRepository->delete($id);
+        $result = $this->articleRepository->delete($id);
+
+        return $result;
     }
 
     public static function createArticleDto(
@@ -94,13 +104,15 @@ class ArticleService
         User $user,
     ): ArticleDto
     {
-        return new ArticleDto(
+        $result = new ArticleDto(
             (int)$data['id'],
             $data['title'],
             $data['body'],
             $category,
             $user,
         );
+
+        return $result;
     }
 
 }

@@ -17,59 +17,71 @@ class CategoryService
 
     public function getAll(): CategoryCollection
     {
-        $result = $this->categoryRepository->getAll();
+        $data = $this->categoryRepository->getAll();
 
-        return $this->categoryCollection->make($result);
+        return $this->categoryCollection->make($data);
     }
 
     public function getOne(int $id): ?Category
     {
-        $result = $this->categoryRepository->getOne($id);
+        $data = $this->categoryRepository->getOne($id);
 
-        $categoryDto = static::createCategoryDto($result);
+        if ($data === []) {
+            return null;
+        }
 
-        $category = Category::writeNewFrom($categoryDto);
+        $categoryDto = static::createCategoryDto($data);
 
-        return $result === [] ? null : $category;
+        $result = Category::writeNewFrom($categoryDto);
+
+        return $result;
     }
 
     public function create(CategoryDto $categoryDto): ?Category
     {
-        $result = $this->categoryRepository->create($categoryDto);
+        $data = $this->categoryRepository->create($categoryDto);
 
-        if ($result === []) {
+        if ($data === []) {
             return null;
         }
 
-        $categoryDto = static::createCategoryDto($result);
+        $categoryDto = static::createCategoryDto($data);
 
-        return Category::writeNewFrom($categoryDto);
+        $result = Category::writeNewFrom($categoryDto);
+
+        return $result;
     }
 
     public function update(CategoryDto $categoryDto): ?Category
     {
-        $result = $this->categoryRepository->update($categoryDto);
+        $data = $this->categoryRepository->update($categoryDto);
 
-        if ($result === []) {
+        if ($data === []) {
             return null;
         }
 
-        $categoryDto = $this->createCategoryDto($result);
+        $categoryDto = $this->createCategoryDto($data);
 
-        return Category::writeNewFrom($categoryDto);
+        $result = Category::writeNewFrom($categoryDto);
+
+        return $result;
     }
 
     public function delete(int $id): bool
     {
-        return $this->categoryRepository->delete($id);
+        $result = $this->categoryRepository->delete($id);
+
+        return $result;
     }
 
     public static function createCategoryDto(array $data): CategoryDto
     {
-        return new CategoryDto(
+        $result = new CategoryDto(
             (int)$data['id'],
             $data['name'],
         );
+
+        return $result;
     }
 
 }

@@ -3,39 +3,36 @@ declare(strict_types=1);
 
 namespace App\lesson_23_07_2024\V2\Router;
 
-use App\lesson_23_07_2024\V1\Models\Model;
-use App\lesson_23_07_2024\V2\Collections\Collection;
-use App\lesson_23_07_2024\V2\Database\PDODriver;
-
 class Router
 {
-    public function __construct(
-        private readonly array $configDependencies,
-        private readonly PDODriver $PDODriver,
-    ) {}
+    public function __construct(private readonly array $configDependencies) {}
 
     private function resolve(string $className): ?object
     {
         if (isset($this->configDependencies[$className])) {
+            $classConfig = $this->configDependencies[$className];
+
             $dependencies = array_map(function ($dependency) {
-                if ($dependency === PDODriver::class) {
-                    return $this->PDODriver;
-                }
-
                 return $this->resolve($dependency);
-            }, $this->configDependencies[$className]['dependencies']);
+            }, $classConfig['dependencies'] ?? []);
 
-            return new $className(...$dependencies);
+            $parameters = $classConfig['parameters'] ?? [];
+
+            $constructorArgs = array_merge($dependencies, $parameters);
+
+            return new $className(...$constructorArgs);
         }
 
         return null;
     }
 
-    public function dispatch(string $className, string $actionName, array $post): mixed
+    public function dispatch(
+        string $className,
+        string $actionName,
+        array $post,
+    ): mixed
     {
-        $controllerClass = 'App\lesson_23_07_2024\V2\Controllers\\' . $className . 'Controller';
-
-        $controller = $this->resolve($controllerClass);
+        $controller = $this->resolve($className);
 
         return $controller->$actionName($post);
     }

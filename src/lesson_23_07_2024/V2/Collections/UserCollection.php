@@ -21,7 +21,7 @@ class UserCollection extends Collection
         return $this->items;
     }
 
-    public function make(array $items): ?UserCollection
+    public function make(array $items): UserCollection
     {
         $result = array_map(function(array $item) {
             $userRoles = $this->userRolesService->getAllByUserId($item['id']);
@@ -29,17 +29,12 @@ class UserCollection extends Collection
 
             $userDto = UserService::createUserDto($item, $roles);
 
-            return User::writeNewFrom($userDto);
+            $result = User::writeNewFrom($userDto);
+
+            return $result;
         }, $items);
 
-        $this->set($result);
-
-        return $result ? $this : null;
-    }
-
-    public function set(array $items): UserCollection
-    {
-        $this->items = $items;
+        $this->items = $result;
 
         return $this;
     }
@@ -54,7 +49,7 @@ class UserCollection extends Collection
 
         $result = $this->roleCollection->set($roles);
 
-        return $result ? $this->roleCollection : null;
+        return $result === null ? null : $this->roleCollection;
     }
 
 }

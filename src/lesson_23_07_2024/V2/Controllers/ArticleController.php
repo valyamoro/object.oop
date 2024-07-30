@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\lesson_23_07_2024\V2\Controllers;
 
 use App\lesson_23_07_2024\V2\Collections\ArticleCollection;
+use App\lesson_23_07_2024\V2\Exceptions\ExceptionController;
 use App\lesson_23_07_2024\V2\Models\Article;
 use App\lesson_23_07_2024\V2\Services\ArticleService;
 use App\lesson_23_07_2024\V2\Services\CategoryService;
@@ -19,20 +20,26 @@ class ArticleController extends Controller
 
     public function index(): ArticleCollection
     {
-        return $this->articleService->getAll();
+        $result = $this->articleService->getAll();
+
+        return $result;
     }
 
+    /**
+     * @throws ExceptionController
+     */
     public function store(array $request): ?Article
     {
-        $request['id'] = 0;
-        $categoryId = $request['category_id'];
-        $category = $this->categoryService->getOne((int)$categoryId);
+        $categoryId = (int)$request['category_id'];
+        $userId = (int)$request['user_id'];
 
-        $userId = $request['user_id'];
-        $user = $this->userService->getOne((int)$userId);
+        $category = $this->categoryService->getOne($categoryId);
+        $user = $this->userService->getOne($userId);
 
         $articleDto = ArticleService::createArticleDto(
-            $request,
+            array_merge(
+                $request, ['id' => 0],
+            ),
             $category,
             $user,
         );
@@ -40,7 +47,10 @@ class ArticleController extends Controller
         $result = $this->articleService->store($articleDto);
 
         if ($result === null) {
-            return null;
+            throw new ExceptionController(
+                'Произошла ошибка создания статьи',
+                500,
+            );
         }
 
         return $result;
@@ -48,12 +58,11 @@ class ArticleController extends Controller
 
     public function update(array $request): ?Article
     {
-        $categoryId = $request['category_id'];
-        $category = $this->categoryService->getOne((int)$categoryId);
+        $categoryId = (int)$request['category_id'];
+        $userId = (int)$request['user_id'];
 
-        $userId = $request['user_id'];
-        $user = $this->userService->getOne((int)$userId);
-
+        $category = $this->categoryService->getOne($categoryId);
+        $user = $this->userService->getOne($userId);
 
         $articleDto = ArticleService::createArticleDto(
             $request,
@@ -64,24 +73,51 @@ class ArticleController extends Controller
         $result = $this->articleService->update($articleDto);
 
         if ($result === null) {
-            return null;
+            throw new ExceptionController(
+                'Произошла ошибка обновления статьи',
+                500,
+            );
         }
 
         return $result;
     }
 
+    /**
+     * @throws ExceptionController
+     */
     public function show(array $request): ?Article
     {
         $id = (int)$request['id'];
 
-        return $this->articleService->getOne($id);
+        $result = $this->articleService->getOne($id);
+
+        if ($result === null) {
+            throw new ExceptionController(
+                'Произошла ошибка получения статьи',
+                500,
+            );
+        }
+
+        return $result;
     }
 
+    /**
+     * @throws ExceptionController
+     */
     public function delete(array $request): bool
     {
         $id = (int)$request['id'];
 
-        return $this->articleService->delete($id);
+        $result = $this->articleService->delete($id);
+
+        if ($result === false) {
+            throw new ExceptionController(
+                'Произошла ошибка удаления статьи',
+                500,
+            );
+        }
+
+        return $result;
     }
 
 }

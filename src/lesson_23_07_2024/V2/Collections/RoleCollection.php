@@ -2,7 +2,6 @@
 
 namespace App\lesson_23_07_2024\V2\Collections;
 
-use App\lesson_23_07_2024\V2\Dto\RoleDto;
 use App\lesson_23_07_2024\V2\Models\Role;
 use App\lesson_23_07_2024\V2\Services\RoleService;
 
@@ -18,20 +17,37 @@ class RoleCollection extends Collection
         $result = array_map(function(array $item) {
             $roleDto = RoleService::createRoleDto($item);
 
-            return Role::writeNewFrom($roleDto);
+            $result = Role::writeNewFrom($roleDto);
+
+            return $result;
         }, $items);
 
-        $this->set($result);
+        $this->items = $result;
 
         return $this;
     }
 
 
-    public function set(array $items): RoleCollection
+    public function set(array $items): ?RoleCollection
     {
-        $this->items = $items;
+        $isCorrectCollection = true;
 
-        return $this;
+        foreach ($items as $item) {
+            if (($item instanceof Role) === false) {
+                $isCorrectCollection = false;
+                break;
+            }
+        }
+
+        if ($isCorrectCollection) {
+            $result = null;
+        } else {
+            $this->items = $items;
+
+            $result = $this;
+        }
+
+        return $result;
     }
 
 }
